@@ -1,0 +1,18 @@
+[Unit]
+Description=Kibana Server
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Environment=KIBANA_PATH_CONF={{ base_dir }}/current/config
+Environment=NODE_ENV=production
+
+User={{ kibana_user }}
+Group={{ kibana_group }}
+Type=simple
+
+WorkingDirectory={{ base_dir }}/current
+ExecStart={{ base_dir }}/current/bin/kibana
+
+[Install]
+WantedBy=multi-user.target

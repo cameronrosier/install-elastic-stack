@@ -1,0 +1,15 @@
+[Unit]
+Description=Logstash Server
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+User={{ logstash_user }}
+Group={{ logstash_group }}
+Type=simple
+
+WorkingDirectory={{ base_dir }}/current
+ExecStart={{ base_dir }}/current/bin/logstash -f {{ base_dir }}/current/config/logstash.conf
+
+[Install]
+WantedBy=multi-user.target

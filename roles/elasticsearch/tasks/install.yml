@@ -1,0 +1,40 @@
+---
+- name: Install | Register ES Path to stat
+  stat:
+    path: "{{ base_dir}}/releases/elasticsearch-{{ elasticsearch_version }}"
+  register: p
+
+- name: Install | Get binary
+  unarchive:
+    src: "{{ elasticsearch_download_url }}"
+    dest: "{{ base_dir }}/releases"
+    remote_src: yes
+    # validate_certs: no
+  when: not p.stat.exists
+
+- name: Install | Create current symlink
+  file:
+    src: "{{ base_dir }}/releases/elasticsearch-{{ elasticsearch_version }}"
+    dest: "{{ base_dir }}/current"
+    owner: "{{ elasticsearch_user }}"
+    group: "{{ elasticsearch_group }}"
+    state: link
+  notify:
+    - restart elasticsearch
+    - fix elasticsearch permissions
+
+- name: Install | Copy configs
+  copy:
+    src: "{{ cfgs_dir }}/Elasticsearch/{{ item }}"
+    dest: "{{ base_dir }}/releases/elasticsearch-{{ elasticsearch_version }}/config/"
+    owner: "{{ elasticsearch_user }}"
+    group: "{{ elasticsearch_group }}"
+    remote_src: yes
+  with_items:
+    - "elasticsearch.yml"
+    - "jvm.options"
+
+- name: Install | Enable elasticsearch service
+  systemd:
+    name: elasticsearch
+    enabled: yes

@@ -1,0 +1,15 @@
+---
+- name: fix kibana permissions
+  file:
+    path: "{{ base_dir }}/releases/kibana-{{ kibana_version }}"
+    recurse: yes
+    owner: "{{ kibana_user }}"
+    group: "{{ kibana_group }}"
+    mode: 0777
+
+- name: restart kibana
+  become: true
+  systemd:
+    name: kibana
+    daemon_reload: yes
+    state: restarted

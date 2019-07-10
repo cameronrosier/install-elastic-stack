@@ -1,0 +1,40 @@
+---
+- name: Configure | Create a service account
+  user:
+    name: "{{ elasticsearch_user }}"
+
+- name: Configure | Ensure base folder structure
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0777
+  with_items:
+    - "{{ base_dir }}"
+    - "{{ cfgs_dir }}"
+
+- name: Configure | Create releases folder
+  file:
+    path: "{{ base_dir }}/releases"
+    state: directory
+    owner: "{{ elasticsearch_user }}"
+    group: "{{ elasticsearch_group }}"
+    mode: 0777
+
+- name: Configure | Create systemd file
+  template:
+    src: elasticsearch.service.j2
+    dest: "{{ systemd_file_path }}/elasticsearch.service"
+    owner: root
+    group: "{{ elasticsearch_group }}"
+  no_log: no
+  notify: restart elasticsearch
+
+- name: Configure | Get configs for ELK
+  git:
+    repo: "{{ cfgs_repo }}"
+    dest: "{{ cfgs_dir }}"
+    force: yes
+  tags:
+    - skip_ansible_lint

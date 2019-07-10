@@ -1,0 +1,39 @@
+---
+- name: Install | Register logstash Path to stat
+  stat:
+    path: "{{ base_dir}}/releases/logstash-{{ logstash_version }}"
+  register: p
+
+- name: Install | Get binary
+  unarchive:
+    src: "{{ logstash_download_url }}"
+    dest: "{{ base_dir }}/releases"
+    remote_src: yes
+    # validate_certs: no
+  when: not p.stat.exists
+
+- name: Install | Create current symlink
+  file:
+    src: "{{ base_dir }}/releases/logstash-{{ logstash_version }}"
+    dest: "{{ base_dir }}/current"
+    owner: "{{ logstash_user }}"
+    group: "{{ logstash_group }}"
+    state: link
+  notify:
+    - restart logstash
+    - fix logstash permissions
+
+- name: Install | Copy configs
+  copy:
+    src: "{{ cfgs_dir }}/logstash/{{ item }}"
+    dest: "{{ base_dir }}/releases/logstash-{{ logstash_version }}/config/"
+    owner: "{{ logstash_user }}"
+    group: "{{ logstash_group }}"
+    remote_src: yes
+  with_items:
+    - "logstash.yml"
+
+- name: Install | Enable logstash service
+  systemd:
+    name: logstash
+    enabled: yes

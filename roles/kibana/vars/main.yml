@@ -1,0 +1,10 @@
+---
+# Variables necessary for Kibana installation
+base_dir: "/opt/apps/kibana"
+cfgs_repo: "https://github.com/kibanacfgs"
+cfgs_dir: "/opt/app_cfgs/kibana"
+
+kibana_user: "kibana"
+kibana_group: "kibana"
+kibana_version: "7.2.0"
+kibana_download_url: "https://artifacts.elastic.co/downloads/kibana/kibana-{{ kibana_version }}-linux-x86_64.tar.gz"

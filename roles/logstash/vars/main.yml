@@ -1,0 +1,12 @@
+---
+# vars file for logstash
+base_dir: "/opt/apps/logstash"
+cfgs_repo: "https://github.com/logstashcfgs"
+cfgs_dir: "/opt/app_cfgs/logstash"
+
+logstash_version: "7.2.0"
+
+logstash_download_url: "https://artifacts.elastic.co/downloads/logstash/logstash-{{ logstash_version }}.tar.gz"
+
+logstash_user: "logstash"
+logstash_group: "logstash"

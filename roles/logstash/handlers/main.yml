@@ -1,0 +1,15 @@
+---
+- name: fix logstash permissions
+  file:
+    path: "{{ base_dir }}/releases/logstash-{{ logstash_version }}"
+    recurse: yes
+    owner: "{{ logstash_user }}"
+    group: "{{ logstash_group }}"
+    mode: 0777
+
+- name: restart logstash
+  become: true
+  systemd:
+    name: logstash
+    daemon_reload: yes
+    state: restarted

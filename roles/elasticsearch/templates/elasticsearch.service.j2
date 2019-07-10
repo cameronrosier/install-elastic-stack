@@ -1,0 +1,57 @@
+[Unit]
+Description=Elasticsearch Server
+Dcoumentation=http://www.elastic.co
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+RuntimeDirectory=elasticsearch
+PrivateTmp=true
+Environment=ES_HOME={{ base_dir }}/current
+Environment=ES_PATH_CONF={{ base_dir }}/current/config
+Environment=PID_DIR={{ base_dir }}/current
+
+WorkingDirectory={{ base_dir }}/current
+
+User={{ elasticsearch_user }}
+Group={{ elasticsearch_group }}
+
+ExecStart={{ base_dir }}/current/bin/elasticsearch -p ${PID_DIR}/elasticsearch.pid --quiet
+
+StandardOutput=journal
+StandardError=inherit
+
+# Gives the server full access of memory
+LimitMEMLOCK={{ memlock_limit }}
+
+# Specifies the maximum file descriptor number that can be opened by this process
+LimitNOFILE={{ nofile_limit }}
+
+# Specifies the maximum number of processes
+LimitNPROC={{ nproc_limit }}
+
+# Specifies the maximum size of virtual memory
+LimitAS={{ vm_max_size }}
+
+# Specifies the maimum file size
+LimitFSIZE={{ max_file_size }}
+
+# Disable timeout logic and wait until process is stopped
+TimeoutStopSec=0
+
+# SIGTERM signal is used to stop the Java process
+KillSignal=SIGTERM
+
+# Send the signal only to the JVM rather than its control group
+KillMode=process
+
+# Java process is never killed
+SendSIGKILL=no
+
+# When a JVM receives a SIGTERM signal it exits with code 143
+SuccessExitStatus=143
+
+[Install]
+WantedBy=multi-user.target
+
+

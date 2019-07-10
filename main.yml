@@ -1,0 +1,12 @@
+---
+- name: ElasticStack | Install Components of the Elastic Stack
+  become: yes
+  hosts: all
+
+  roles:
+    - role: elasticsearch
+      when: "'elasticsearch' in actions or 'stack' in actions"
+    - role: kibana
+      when: "'kibana' in actions or 'stack' in actions"
+    - role: logstash
+      when: "'logstash' in actions or 'stack' in actions"

@@ -1,0 +1,18 @@
+---
+galaxy_info:
+  author: Cameron Rosier
+  description: A DevOps Engineer
+  company: cameronrosier
+
+  license: Apache
+
+  min_ansible_version: 1.2
+
+  platforms:
+    - name: ubuntu
+      versions:
+        - all
+
+  galaxy_tags: []
+
+dependencies: []

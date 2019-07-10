@@ -1,0 +1,15 @@
+---
+- name: fix elasticsearch permissions
+  file:
+    path: "{{ base_dir }}/releases/elasticsearch-{{ elasticsearch_version }}"
+    recurse: yes
+    owner: "{{ elasticsearch_user }}"
+    group: "{{ elasticsearch_group }}"
+    mode: 0777
+
+- name: restart elasticsearch
+  become: true
+  systemd:
+    name: elasticsearch
+    daemon_reload: yes
+    state: restarted

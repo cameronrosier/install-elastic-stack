@@ -1,0 +1,19 @@
+---
+base_dir: "/opt/apps/elasticsearch"
+cfgs_repo: "https://github.com/myrepo"
+cfgs_dir: "/opt/app_cfgs/elasticsearch"
+
+elasticsearc_version: "7.2.0"
+elasticsearch_download_url: "https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-{{ elasticsearch_version }}-linux-x86_64.tar.gz"
+
+jvm_min_mem: "1"
+jvm_max_mem: "2"
+
+memlock_limit: "infinity"
+nofile_limit: "65536"
+nproc_limit: "4096"
+vm_max_size: "infinity"
+max_file_size: "infinity"
+
+elasticsearch_user: "elasticsearch"
+elasticsearch_group: "elasticsearch"

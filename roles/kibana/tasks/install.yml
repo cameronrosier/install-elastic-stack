@@ -1,0 +1,39 @@
+---
+- name: Install | Register Kibana Path to stat
+  stat:
+    path: "{{ base_dir}}/releases/kibana-{{ kibana_version }}"
+  register: p
+
+- name: Install | Get binary
+  unarchive:
+    src: "{{ kibana_download_url }}"
+    dest: "{{ base_dir }}/releases"
+    remote_src: yes
+    # validate_certs: no
+  when: not p.stat.exists
+
+- name: Install | Create current symlink
+  file:
+    src: "{{ base_dir }}/releases/kibana-{{ kibana_version }}"
+    dest: "{{ base_dir }}/current"
+    owner: "{{ kibana_user }}"
+    group: "{{ kibana_group }}"
+    state: link
+  notify:
+    - restart kibana
+    - fix kibana permissions
+
+- name: Install | Copy configs
+  copy:
+    src: "{{ cfgs_dir }}/kibana/{{ item }}"
+    dest: "{{ base_dir }}/releases/kibana-{{ kibana_version }}/config/"
+    owner: "{{ kibana_user }}"
+    group: "{{ kibana_group }}"
+    remote_src: yes
+  with_items:
+    - "kibana.yml"
+
+- name: Install | Enable kibana service
+  systemd:
+    name: kibana
+    enabled: yes

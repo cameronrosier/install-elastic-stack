@@ -1,0 +1,4 @@
+---
+# tasks file for kibana
+- include_tasks: configure.yml
+- include_tasks: install.yml
