@@ -1,2 +1,5 @@
 [local]
 localhost ansible_connection=local
+
+[mypc]
+70.50.177.68 ansible_user=cam ansible_port=222
