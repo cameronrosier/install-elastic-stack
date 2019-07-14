@@ -1,0 +1,2 @@
+[mypc]
+70.50.177.68:222 ansible_connection=ssh ansible_user=cam ansible_ssh_private_key_file=/home/ubuntu/.ssh/id_rsa
